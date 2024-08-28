@@ -35,9 +35,11 @@ func New(version string) func() *schema.Provider {
 					Sensitive:   true,
 				},
 			},
+
 			ResourcesMap: map[string]*schema.Resource{
-				"rad-security_aws_register":   resourceAwsRegister(),
-				"rad-security_azure_register": resourceAzureRegister(),
+				"rad-security_aws_register":    resourceAwsRegister(),
+				"rad-security_azure_register":  resourceAzureRegister(),
+				"rad-security_cluster_api_key": resourceClusterAPIKey(),
 			},
 			ConfigureContextFunc: configureProvider,
 		}
