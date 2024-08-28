@@ -26,7 +26,7 @@ type ClusterAPIAccesskey struct {
 
 func resourceClusterAPIKey() *schema.Resource {
 	return &schema.Resource{
-		Description: "Register AWS account with Rad Security",
+		Description: "Create new cluster access keys to use",
 
 		CreateContext: resourceClusterAPIKeyCreate,
 		ReadContext:   resourceClusterAPIKeyRead,
