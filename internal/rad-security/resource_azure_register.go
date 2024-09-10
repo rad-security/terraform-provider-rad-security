@@ -36,6 +36,16 @@ func resourceAzureRegister() *schema.Resource {
 				Description: "Target of the API path",
 				Computed:    true,
 			},
+			"service_principal_id": {
+				Type:        schema.TypeString,
+				Description: "Optional: Service principal ID to use when authenticating  with id and secret. OIDC based auth is the preferred option as it is more secure.",
+				Optional:    true,
+			},
+			"service_principal_secret": {
+				Type:        schema.TypeString,
+				Description: "Optional: Service principal secret to use when authenticating with id and secret.  OIDC based auth is the preferred option as it is more secure.",
+				Optional:    true,
+			},
 
 			// Computed values
 			"api_path": {
@@ -88,11 +98,23 @@ func resourceAzureRegisterGeneric(ctx context.Context, httpMethod string, d *sch
 
 	tenantID := d.Get("tenant_id").(string)
 	subscriptionId := d.Get("subscription_id").(string)
+	servicePrincipalID := d.Get("service_principal_id").(string)
+	servicePrincipalSecret := d.Get("service_principal_secret").(string)
+
+	if servicePrincipalID == "" && servicePrincipalSecret != "" {
+		return append(diags, diag.Errorf("Service Principal ID cannot be set when Service Principal Secret is")...)
+	}
+
+	if servicePrincipalSecret == "" && servicePrincipalID != "" {
+		return append(diags, diag.Errorf("Service Principal Secret cannot be set when Service Principal ID is")...)
+	}
 
 	payload := &RegistrationPayload{
-		Type:                "azure",
-		AzureTenantID:       tenantID,
-		AzureSubscriptionID: subscriptionId,
+		Type:                        "azure",
+		AzureTenantID:               tenantID,
+		AzureSubscriptionID:         subscriptionId,
+		AzureServicePrincipalID:     servicePrincipalID,
+		AzureServicePrincipalSecret: servicePrincipalSecret,
 	}
 
 	statusCode, _, diags := request.AuthenticatedRequest(ctx, apiUrlBase, httpMethod, targetURI, accessKey, secretKey, payload)
