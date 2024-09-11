@@ -2,13 +2,11 @@ package main
 
 import (
 	"flag"
+
 	radsecurity "github.com/rad-security/terraform-provider-rad-security/internal/rad-security"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 )
-
-//go:generate terraform fmt -recursive ./examples/
-//go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
 
 var (
 	Version string = "dev"

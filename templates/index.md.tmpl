@@ -1,0 +1,25 @@
+---
+page_title: "Provider: Rad Security"
+description: |-
+  Rad Security Provider
+---
+
+The Rad Security provider is a Terraform provider that allows users to interact with Rad Security through Terraform.
+
+It currently supports cloud registration, and cluster api key management.
+
+## Cloud Registration
+
+The cloud registration resource allows users to register their Azure and AWS accounts to their Rad Security account.
+
+## Cluster API Key Management
+
+The cluster api key management resource allows users to manage the api keys for their cluster.
+
+## Example Usage
+
+An example of how to use the provider can look like the following:
+
+{{tffile "examples/example_1.tf"}}
+
+Not all resources need to be used together. Depending on the use case, they can be used individually. They are best used within the modules provided by Rad Security.
