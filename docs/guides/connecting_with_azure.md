@@ -26,7 +26,7 @@ No ID or Secret is needed, and Rad Security will use OIDC to syncronize resource
 
 ## Connecting with ID and Secret
 
-This method uses a Service Principal ID and Secret for authentication. With an existing Azure Service Principal. This is not the recommended method. OIDC is recommended as it is more secure and easier to manage.
+This method uses a Service Principal ID and Secret for authentication with an existing Azure Service Principal. This is not the recommended method. OIDC is recommended as it is more secure and easier to manage.
 
 In your Terraform configuration, use the rad-security_azure_register resource:
 
