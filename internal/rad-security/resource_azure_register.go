@@ -36,14 +36,14 @@ func resourceAzureRegister() *schema.Resource {
 				Description: "Target of the API path",
 				Computed:    true,
 			},
-			"service_principal_id": {
+			"service_principal_token_id": {
 				Type:        schema.TypeString,
-				Description: "Optional: Service principal ID to use when authenticating  with id and secret. OIDC based auth is the preferred option as it is more secure.",
+				Description: "Optional: Service Principal Token ID to use when authenticating  with token id and secret. OIDC based auth is the preferred option as it is more secure.",
 				Optional:    true,
 			},
-			"service_principal_secret": {
+			"service_principal_token_secret": {
 				Type:        schema.TypeString,
-				Description: "Optional: Service principal secret to use when authenticating with id and secret.  OIDC based auth is the preferred option as it is more secure.",
+				Description: "Optional: Service Principal Token Secret to use when authenticating with token id and secret. OIDC based auth is the preferred option as it is more secure.",
 				Optional:    true,
 			},
 

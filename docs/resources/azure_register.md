@@ -22,8 +22,8 @@ Register Azure Subscription and Tenant with Rad Security
 
 ### Optional
 
-- `service_principal_id` (String) Optional: Service principal ID to use when authenticating  with id and secret. OIDC based auth is the preferred option as it is more secure.
-- `service_principal_secret` (String) Optional: Service principal secret to use when authenticating with id and secret.  OIDC based auth is the preferred option as it is more secure.
+- `service_principal_token_id` (String) Optional: Service Principal Token ID to use when authenticating  with token id and secret. OIDC based auth is the preferred option as it is more secure.
+- `service_principal_token_secret` (String) Optional: Service Principal Token Secret to use when authenticating with token id and secret. OIDC based auth is the preferred option as it is more secure.
 
 ### Read-Only
 
