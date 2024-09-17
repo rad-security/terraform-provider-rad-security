@@ -22,20 +22,20 @@ resource "rad-security_azure_register" "example" {
 }
 ```
 
-No ID or Secret is needed, and Rad Security will use OIDC to syncronize resources from your Azure subscription.
+No Token ID or Secret is needed for the Service Principal, and Rad Security will use OIDC to synchronize resources from your Azure subscription.
 
 ## Connecting with ID and Secret
 
-This method uses a Service Principal ID and Secret for authentication with an existing Azure Service Principal. This is not the recommended method. OIDC is recommended as it is more secure and easier to manage.
+This method uses a Service Principal Token ID and Secret for authentication with an existing Azure Service Principal. This is not the recommended method. OIDC is recommended as it is more secure and easier to manage.
 
 In your Terraform configuration, use the rad-security_azure_register resource:
 
 ```hcl
 resource "rad-security_azure_register" "azure_connection" {
-  subscription_id           = "your-azure-subscription-id"
-  tenant_id                 = "your-azure-tenant-id"
-  service_principal_id      = "your-service-principal-id"
-  service_principal_secret  = "your-service-principal-secret"
+  subscription_id                = "your-azure-subscription-id"
+  tenant_id                      = "your-azure-tenant-id"
+  service_principal_token_id     = "your-service-principal-token-id"
+  service_principal_token_secret = "your-service-principal-token-secret"
 }
 ```
 
@@ -43,5 +43,5 @@ Replace the placeholder values with your actual Azure details:
 
 - `subscription_id`: Your Azure Subscription ID
 - `tenant_id`: Your Azure Tenant ID
-- `service_principal_id`: The ID of the Service Principal you created
-- `service_principal_secret`: The secret of the Service Principal
+- `service_principal_token_id`: The Token ID of the Service Principal you created
+- `service_principal_token_secret`: The Token Secret of the Service Principal
