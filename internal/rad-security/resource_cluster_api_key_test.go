@@ -47,7 +47,6 @@ func TestAccResourceClusterApiKeyCreate(t *testing.T) {
 
 func testAccClusterApiKeyHttpMock(accessKeyID string, secretKey string, clusterApiKeyResponse *ClusterAPIAccesskey) *httptest.Server {
 	return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf(r.URL.Path + "\n")
 		if r.URL.Path == "/authentication/authenticate" {
 			var req auth.AuthRequest
 			if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -58,17 +57,26 @@ func testAccClusterApiKeyHttpMock(accessKeyID string, secretKey string, clusterA
 			if req.AccessKeyID == accessKeyID && req.SecretKey == secretKey {
 				resp := auth.AuthResponse{Token: "mock_token"}
 				w.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(w).Encode(resp)
+				err := json.NewEncoder(w).Encode(resp)
+				if err != nil {
+					panic(err)
+				}
 			} else {
 				http.Error(w, "unauthorized", http.StatusUnauthorized)
 			}
 		} else if r.URL.Path == "/accounts/access_keys" {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusCreated)
-			json.NewEncoder(w).Encode(clusterApiKeyResponse)
+			err := json.NewEncoder(w).Encode(clusterApiKeyResponse)
+			if err != nil {
+				panic(err)
+			}
 			return
 		} else if r.URL.Path == "/accounts/access_keys/"+clusterApiKeyResponse.ID {
-			json.NewEncoder(w).Encode(clusterApiKeyResponse)
+			err := json.NewEncoder(w).Encode(clusterApiKeyResponse)
+			if err != nil {
+				panic(err)
+			}
 			return
 		} else if r.URL.Path == "/accounts/access_keys/"+clusterApiKeyResponse.ID+"/revoke" {
 			w.WriteHeader(http.StatusNoContent)

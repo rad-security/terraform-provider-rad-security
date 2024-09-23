@@ -37,13 +37,19 @@ func testAccCloudRegisterHttpMock(accessKeyID string, secretKey string, registra
 			if req.AccessKeyID == accessKeyID && req.SecretKey == secretKey {
 				resp := auth.AuthResponse{Token: "mock_token"}
 				w.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(w).Encode(resp)
+				err := json.NewEncoder(w).Encode(resp)
+				if err != nil {
+					panic(err)
+				}
 			} else {
 				http.Error(w, "unauthorized", http.StatusUnauthorized)
 			}
 		} else if r.URL.Path == "/cloud/register" {
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(registrationResponse)
+			err := json.NewEncoder(w).Encode(registrationResponse)
+			if err != nil {
+				panic(err)
+			}
 			return
 		} else {
 			http.NotFound(w, r)
