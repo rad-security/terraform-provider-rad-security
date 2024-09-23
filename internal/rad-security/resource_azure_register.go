@@ -98,23 +98,23 @@ func resourceAzureRegisterGeneric(ctx context.Context, httpMethod string, d *sch
 
 	tenantID := d.Get("tenant_id").(string)
 	subscriptionId := d.Get("subscription_id").(string)
-	servicePrincipalID := d.Get("service_principal_id").(string)
-	servicePrincipalSecret := d.Get("service_principal_secret").(string)
+	servicePrincipalTokenID := d.Get("service_principal_token_id").(string)
+	servicePrincipalTokenSecret := d.Get("service_principal_token_secret").(string)
 
-	if servicePrincipalID == "" && servicePrincipalSecret != "" {
-		return append(diags, diag.Errorf("Service Principal ID cannot be set when Service Principal Secret is")...)
+	if servicePrincipalTokenID == "" && servicePrincipalTokenSecret != "" {
+		return append(diags, diag.Errorf("Service Principal Token Secret cannot be set when Service Principal Token ID is")...)
 	}
 
-	if servicePrincipalSecret == "" && servicePrincipalID != "" {
-		return append(diags, diag.Errorf("Service Principal Secret cannot be set when Service Principal ID is")...)
+	if servicePrincipalTokenSecret == "" && servicePrincipalTokenID != "" {
+		return append(diags, diag.Errorf("Service Principal Token ID cannot be set when Service Principal Token Secret is")...)
 	}
 
 	payload := &RegistrationPayload{
 		Type:                        "azure",
 		AzureTenantID:               tenantID,
 		AzureSubscriptionID:         subscriptionId,
-		AzureServicePrincipalID:     servicePrincipalID,
-		AzureServicePrincipalSecret: servicePrincipalSecret,
+		AzureServicePrincipalID:     servicePrincipalTokenID,
+		AzureServicePrincipalSecret: servicePrincipalTokenSecret,
 	}
 
 	statusCode, _, diags := request.AuthenticatedRequest(ctx, apiUrlBase, httpMethod, targetURI, accessKey, secretKey, payload)
