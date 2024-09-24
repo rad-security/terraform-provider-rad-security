@@ -11,32 +11,32 @@ import (
 )
 
 type Authenticator struct {
-	apiURL     string
+	ApiURL     string
 	httpClient *http.Client
 }
 
 func New(apiURL string) *Authenticator {
 	return &Authenticator{
-		apiURL: apiURL,
+		ApiURL: apiURL,
 		httpClient: &http.Client{
 			Timeout: 15 * time.Second,
 		},
 	}
 }
 
-type authRequest struct {
+type AuthRequest struct {
 	AccessKeyID string `json:"access_key_id"`
 	SecretKey   string `json:"secret_key"`
 }
 
-type authResponse struct {
+type AuthResponse struct {
 	Token string `json:"token"`
 }
 
 func (a *Authenticator) Authenticate(ctx context.Context, accessKeyID, secretKey string) (string, error) {
-	authURL := fmt.Sprintf("%s/authentication/authenticate", a.apiURL)
+	authURL := fmt.Sprintf("%s/authentication/authenticate", a.ApiURL)
 
-	reqBytes, err := json.Marshal(&authRequest{
+	reqBytes, err := json.Marshal(&AuthRequest{
 		AccessKeyID: accessKeyID,
 		SecretKey:   secretKey,
 	})
@@ -65,7 +65,7 @@ func (a *Authenticator) Authenticate(ctx context.Context, accessKeyID, secretKey
 		return "", fmt.Errorf("cannot auth: %s", string(bodyBytes))
 	}
 
-	var authResp authResponse
+	var authResp AuthResponse
 	if err = json.Unmarshal(bodyBytes, &authResp); err != nil {
 		return "", fmt.Errorf("unmarshaling auth response: %w", err)
 	}

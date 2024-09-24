@@ -10,40 +10,36 @@ func init() {
 	schema.DescriptionKind = schema.StringMarkdown
 }
 
-func New(version string) func() *schema.Provider {
-	return func() *schema.Provider {
-		p := &schema.Provider{
-			Schema: map[string]*schema.Schema{
-				"rad_security_api_url": {
-					Type:        schema.TypeString,
-					Description: "Rad Security API to target. Defaults to https://api.rad.security",
-					Default:     "https://api.rad.security",
-					Optional:    true,
-				},
-				"access_key_id": {
-					Type:        schema.TypeString,
-					Description: "Rad Security Customer Access ID",
-					ForceNew:    true,
-					Required:    true,
-					Sensitive:   true,
-				},
-				"secret_key": {
-					Type:        schema.TypeString,
-					Description: "Rad Security Customer Secret Key",
-					ForceNew:    true,
-					Required:    true,
-					Sensitive:   true,
-				},
+func Provider() *schema.Provider {
+	return &schema.Provider{
+		Schema: map[string]*schema.Schema{
+			"rad_security_api_url": {
+				Type:        schema.TypeString,
+				Description: "Rad Security API to target. Defaults to https://api.rad.security",
+				Default:     "https://api.rad.security",
+				Optional:    true,
 			},
+			"access_key_id": {
+				Type:        schema.TypeString,
+				Description: "Rad Security Customer Access ID",
+				ForceNew:    true,
+				Required:    true,
+			},
+			"secret_key": {
+				Type:        schema.TypeString,
+				Description: "Rad Security Customer Secret Key",
+				ForceNew:    true,
+				Required:    true,
+				Sensitive:   true,
+			},
+		},
 
-			ResourcesMap: map[string]*schema.Resource{
-				"rad-security_aws_register":    resourceAwsRegister(),
-				"rad-security_azure_register":  resourceAzureRegister(),
-				"rad-security_cluster_api_key": resourceClusterAPIKey(),
-			},
-			ConfigureContextFunc: configureProvider,
-		}
-		return p
+		ResourcesMap: map[string]*schema.Resource{
+			"rad-security_aws_register":    resourceAwsRegister(),
+			"rad-security_azure_register":  resourceAzureRegister(),
+			"rad-security_cluster_api_key": resourceClusterAPIKey(),
+		},
+		ConfigureContextFunc: configureProvider,
 	}
 }
 
