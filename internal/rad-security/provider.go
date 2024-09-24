@@ -24,7 +24,6 @@ func Provider() *schema.Provider {
 				Description: "Rad Security Customer Access ID",
 				ForceNew:    true,
 				Required:    true,
-				Sensitive:   true,
 			},
 			"secret_key": {
 				Type:        schema.TypeString,
