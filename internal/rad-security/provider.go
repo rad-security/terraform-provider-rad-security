@@ -2,6 +2,7 @@ package rad_security
 
 import (
 	"context"
+
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -35,9 +36,10 @@ func Provider() *schema.Provider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			"rad-security_aws_register":    resourceAwsRegister(),
-			"rad-security_azure_register":  resourceAzureRegister(),
-			"rad-security_cluster_api_key": resourceClusterAPIKey(),
+			"rad-security_aws_register":          resourceAwsRegister(),
+			"rad-security_azure_register":        resourceAzureRegister(),
+			"rad-security_cluster_api_key":       resourceClusterAPIKey(),
+			"rad-security_google_cloud_register": resourceGoogleCloud(),
 		},
 		ConfigureContextFunc: configureProvider,
 	}
@@ -61,11 +63,16 @@ func configureProvider(ctx context.Context, d *schema.ResourceData) (interface{}
 }
 
 type RegistrationPayload struct {
-	Type                        string `json:"type"`
-	AWSAccountID                string `db:"aws_account_id" json:"aws_account_id"`
-	AWSRoleArn                  string `db:"aws_role_arn" json:"aws_role_arn"`
-	AzureSubscriptionID         string `db:"azure_subscription_id" json:"azure_subscription_id"`
-	AzureTenantID               string `db:"azure_tenant_id" json:"azure_tenant_id"`
-	AzureServicePrincipalID     string `json:"azure_service_principal_id"`
-	AzureServicePrincipalSecret string `json:"azure_service_principal_secret"`
+	Type                                        string  `json:"type"`
+	ID                                          string  `json:"id"`
+	AWSAccountID                                string  `json:"aws_account_id"`
+	AWSRoleArn                                  string  `json:"aws_role_arn"`
+	AzureSubscriptionID                         string  `json:"azure_subscription_id"`
+	AzureTenantID                               string  `json:"azure_tenant_id"`
+	AzureServicePrincipalID                     string  `json:"azure_service_principal_id"`
+	AzureServicePrincipalSecret                 string  `json:"azure_service_principal_secret"`
+	GoogleCloudProjectNumber                    *string `json:"google_cloud_project_number,omitempty"`
+	GoogleCloudWorkloadIdentityPoolProviderName *string `json:"google_cloud_workload_identity_pool_provider_name,omitempty"`
+	GoogleCloudServiceAccountEmail              *string `json:"google_cloud_service_account_email,omitempty"`
+	RadAccountID                                string  `json:"account_id"`
 }
