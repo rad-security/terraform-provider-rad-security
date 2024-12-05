@@ -74,4 +74,5 @@ type RegistrationPayload struct {
 	GoogleCloudProjectNumber                    *string `json:"google_cloud_project_number,omitempty"`
 	GoogleCloudWorkloadIdentityPoolProviderName *string `json:"google_cloud_workload_identity_pool_provider_name,omitempty"`
 	GoogleCloudServiceAccountEmail              *string `json:"google_cloud_service_account_email,omitempty"`
+	RadAccountID                                string  `json:"account_id"`
 }

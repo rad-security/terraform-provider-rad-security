@@ -71,7 +71,10 @@ func testAccGoogleCloudHttpMock(accessKeyID string, secretKey string, registrati
 			if req.AccessKeyID == accessKeyID && req.SecretKey == secretKey {
 				resp := auth.AuthResponse{Token: "mock_token"}
 				w.Header().Set("Content-Type", "application/json")
-				json.NewEncoder(w).Encode(resp)
+				if err := json.NewEncoder(w).Encode(resp); err != nil {
+					http.Error(w, "failed to encode response", http.StatusInternalServerError)
+					return
+				}
 			} else {
 				http.Error(w, "unauthorized", http.StatusUnauthorized)
 			}
@@ -80,10 +83,16 @@ func testAccGoogleCloudHttpMock(accessKeyID string, secretKey string, registrati
 			switch r.Method {
 			case http.MethodPost:
 				w.WriteHeader(http.StatusOK)
-				json.NewEncoder(w).Encode(registrationResponse)
+				if err := json.NewEncoder(w).Encode(registrationResponse); err != nil {
+					http.Error(w, "failed to encode response", http.StatusInternalServerError)
+					return
+				}
 			case http.MethodPut:
 				w.WriteHeader(http.StatusNoContent)
-				json.NewEncoder(w).Encode(registrationResponse)
+				if err := json.NewEncoder(w).Encode(registrationResponse); err != nil {
+					http.Error(w, "failed to encode response", http.StatusInternalServerError)
+					return
+				}
 			default:
 				http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 			}
@@ -91,7 +100,10 @@ func testAccGoogleCloudHttpMock(accessKeyID string, secretKey string, registrati
 			w.Header().Set("Content-Type", "application/json")
 			switch r.Method {
 			case http.MethodGet:
-				json.NewEncoder(w).Encode(registrationResponse)
+				if err := json.NewEncoder(w).Encode(registrationResponse); err != nil {
+					http.Error(w, "failed to encode response", http.StatusInternalServerError)
+					return
+				}
 			case http.MethodDelete:
 				w.WriteHeader(http.StatusNoContent)
 			default:

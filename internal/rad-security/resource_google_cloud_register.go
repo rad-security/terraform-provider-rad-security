@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -69,7 +70,8 @@ func resourceGoogleCloudWorkloadFederationCreate(ctx context.Context, d *schema.
 		return diag.Errorf("Error decoding JSON: %s", err)
 	}
 
-	d.SetId(cloudAccount.ID)
+	compositeID := cloudAccount.ID + ":" + cloudAccount.RadAccountID
+	d.SetId(compositeID)
 
 	return diags
 }
@@ -77,7 +79,11 @@ func resourceGoogleCloudWorkloadFederationCreate(ctx context.Context, d *schema.
 func resourceGoogleCloudWorkloadFederationRead(ctx context.Context, d *schema.ResourceData, meta any) (diags diag.Diagnostics) {
 	var cloudAccount RegistrationPayload
 
-	cloudAccountID := d.Id()
+	idParts := strings.Split(d.Id(), ":")
+	if len(idParts) != 2 {
+		return diag.Errorf("Invalid ID format, expected ResourceID:RadAccountID")
+	}
+	cloudAccountID := idParts[0]
 
 	config := meta.(*Config)
 	apiUrlBase := config.RadSecurityApiUrl
@@ -104,7 +110,14 @@ func resourceGoogleCloudWorkloadFederationUpdate(ctx context.Context, d *schema.
 	config := meta.(*Config)
 	apiUrlBase := config.RadSecurityApiUrl
 
-	targetURI := apiUrlBase + "/cloud/register"
+	idParts := strings.Split(d.Id(), ":")
+	if len(idParts) != 2 {
+		return diag.Errorf("Invalid ID format, expected ResourceID:RadAccountID")
+	}
+	cloudAccountID := idParts[0]
+	radAccountID := idParts[1]
+
+	targetURI := apiUrlBase + "/cloud/" + cloudAccountID
 	accessKey := config.AccessKeyId
 	secretKey := config.SecretKey
 
@@ -117,6 +130,8 @@ func resourceGoogleCloudWorkloadFederationUpdate(ctx context.Context, d *schema.
 		GoogleCloudProjectNumber: &googleCloudProjectNumber,
 		GoogleCloudWorkloadIdentityPoolProviderName: &googleCloudPoolProviderName,
 		GoogleCloudServiceAccountEmail:              &googleCloudServiceAccountEmail,
+		ID:                                          cloudAccountID,
+		RadAccountID:                                radAccountID,
 	}
 
 	statusCode, body, diags := request.AuthenticatedRequest(ctx, apiUrlBase, http.MethodPut, targetURI, accessKey, secretKey, payload)
@@ -132,7 +147,12 @@ func resourceGoogleCloudWorkloadFederationUpdate(ctx context.Context, d *schema.
 }
 
 func resourceGoogleCloudWorkloadFederationDelete(ctx context.Context, d *schema.ResourceData, meta any) (diags diag.Diagnostics) {
-	cloudAccountID := d.Id()
+	idParts := strings.Split(d.Id(), ":")
+	if len(idParts) != 2 {
+		return diag.Errorf("Invalid ID format, expected ResourceID:RadAccountID")
+	}
+	cloudAccountID := idParts[0]
+
 	config := meta.(*Config)
 	apiUrlBase := config.RadSecurityApiUrl
 
