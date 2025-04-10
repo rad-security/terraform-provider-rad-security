@@ -1,6 +1,6 @@
 module github.com/rad-security/terraform-provider-rad-security
 
-go 1.23
+go 1.24
 
 require (
 	github.com/hashicorp/terraform-plugin-docs v0.19.4

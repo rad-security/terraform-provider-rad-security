@@ -18,7 +18,7 @@ Create new cluster access keys to use
 ### Optional
 
 - `access_key` (String, Sensitive) Rad Security Cluster Access Key
-- `prefix` (String) Prefix for the access key
+- `prefix` (String) Prefix for the access key name
 - `secret_key` (String, Sensitive) Rad Security Cluster Secret Key
 
 ### Read-Only

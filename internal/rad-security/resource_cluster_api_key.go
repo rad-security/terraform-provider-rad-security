@@ -51,7 +51,7 @@ func resourceClusterAPIKey() *schema.Resource {
 			},
 			"prefix": {
 				Type:        schema.TypeString,
-				Description: "Prefix for the access key",
+				Description: "Prefix for the access key name",
 				Optional:    true,
 				ForceNew:    true,
 			},
