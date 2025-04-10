@@ -3,6 +3,8 @@ package rad_security
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"math/rand"
 	"net/http"
 	"time"
 
@@ -47,6 +49,12 @@ func resourceClusterAPIKey() *schema.Resource {
 				Optional:    true,
 				Sensitive:   true,
 			},
+			"prefix": {
+				Type:        schema.TypeString,
+				Description: "Prefix for the access key",
+				Optional:    true,
+				ForceNew:    true,
+			},
 		},
 	}
 }
@@ -54,9 +62,25 @@ func resourceClusterAPIKey() *schema.Resource {
 func resourceClusterAPIKeyCreate(ctx context.Context, d *schema.ResourceData, meta any) (diags diag.Diagnostics) {
 	var clusterAPIKeys ClusterAPIAccesskey
 
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	const length = 8
+
+	randomString := make([]byte, length)
+	for i := range randomString {
+		randomString[i] = charset[rand.Intn(len(charset))]
+	}
+
+	prefix := d.Get("prefix").(string)
+
+	if prefix != "" {
+		prefix = fmt.Sprintf("%s-%s", prefix, string(randomString))
+	} else {
+		prefix = string(randomString)
+	}
+
 	currentTime := time.Now()
-	formattedTime := currentTime.Format("15:04:05 02:01:2006")
-	formattedName := "Terraform-" + formattedTime
+	formattedTime := currentTime.Format(time.RFC3339)
+	formattedName := fmt.Sprintf("%s Terraform %s", prefix, formattedTime)
 
 	config := meta.(*Config)
 	apiUrlBase := config.RadSecurityApiUrl
