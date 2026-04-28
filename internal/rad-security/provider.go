@@ -40,6 +40,7 @@ func Provider() *schema.Provider {
 			"rad-security_azure_register":        resourceAzureRegister(),
 			"rad-security_cluster_api_key":       resourceClusterAPIKey(),
 			"rad-security_google_cloud_register": resourceGoogleCloud(),
+			"rad-security_oci_register":          resourceOCIRegister(),
 		},
 		ConfigureContextFunc: configureProvider,
 	}
@@ -74,5 +75,10 @@ type RegistrationPayload struct {
 	GoogleCloudProjectNumber                    *string `json:"google_cloud_project_number,omitempty"`
 	GoogleCloudWorkloadIdentityPoolProviderName *string `json:"google_cloud_workload_identity_pool_provider_name,omitempty"`
 	GoogleCloudServiceAccountEmail              *string `json:"google_cloud_service_account_email,omitempty"`
+	OCITenancyOCID                              *string `json:"oci_tenancy_ocid,omitempty"`
+	OCIUserOCID                                 *string `json:"oci_user_ocid,omitempty"`
+	OCIFingerprint                              *string `json:"oci_fingerprint,omitempty"`
+	OCIRegion                                   *string `json:"oci_region,omitempty"`
+	OCIPrivateKey                               *string `json:"oci_private_key,omitempty"`
 	RadAccountID                                string  `json:"account_id"`
 }
