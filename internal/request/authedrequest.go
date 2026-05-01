@@ -46,7 +46,7 @@ func AuthenticatedRequest(
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
 
 	httpClient := &http.Client{
-		Timeout: 30 * time.Second,
+		Timeout: 5 * time.Minute,
 	}
 
 	resp, err := httpClient.Do(req)
