@@ -1,0 +1,9 @@
+version: "2"
+
+linters:
+  exclusions:
+    rules:
+      # Style-only suggestion (if/else chain -> tagged switch) in test HTTP mocks.
+      - linters:
+          - staticcheck
+        text: "QF1003"
